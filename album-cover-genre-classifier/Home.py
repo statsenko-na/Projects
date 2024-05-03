@@ -156,7 +156,7 @@ def main():
             st.session_state["file_uploader_key"] = 0
 
         image_file = st.file_uploader(
-            "Загрузите обложку альбома", type=["png", "jpg", "jpeg"], key=st.session_state["file_uploader_key"])
+            "Загрузите обложку альбома для определения жанра и рекомендаций", type=["png", "jpg", "jpeg"], key=st.session_state["file_uploader_key"])
 
         if st.button("Clear uploaded files"):
             st.session_state["file_uploader_key"] += 1
@@ -190,11 +190,10 @@ def main():
                     f"<span style='display: inline-block; width: 240px;'>{bar_filled}{bar_empty}</span>"
                     f"<span style='font-weight: bold; display: inline-block; width: 50px; text-align: right; margin-left: 5px;'>{prob_pct}%</span></div>",
                     unsafe_allow_html=True)
-
-    if image_file is not None:
-        st.subheader('Рекомендации альбомов похожих по обложке',
+    st.subheader('Рекомендации альбомов похожих по обложке',
                      divider='rainbow')
-        D, I = find_similar_covers(np.expand_dims(embedding, axis=0))
+    if image_file is not None:
+            D, I = find_similar_covers(np.expand_dims(embedding, axis=0))
         similar_images = []
         for i in I:
             image_path = df_emb_2.iloc[i]['public_url']
