@@ -23,8 +23,9 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 model_path = settings.MODEL
 index_path = settings.INDEX
 df_path = settings.DF
-# Настройка страницы Streamlit
+TOKEN = st.secrets.TOKEN
 
+# Настройка страницы Streamlit
 st.set_page_config(
     page_title="Album Cover Genre Classification",
     page_icon="🎼",
