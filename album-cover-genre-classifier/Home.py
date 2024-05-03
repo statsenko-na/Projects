@@ -79,7 +79,7 @@ def predict_genre(image):
     with torch.no_grad():
         outputs = model(image_1)
         probs = torch.nn.functional.softmax(outputs, dim=-1)
-        top_p, top_class = probs.topk(3, dim=1)
+        top_p, top_class = probs.topk(5, dim=1)
     emb = get_embeddings(image_1)
     return top_p.squeeze(0).numpy(), top_class.squeeze(0).numpy(), emb
 
@@ -88,9 +88,9 @@ def predict_genre(image):
 
 def find_similar_covers(embedding):
     # Поиск 4 ближайших соседей
-    D, I = index.search(embedding, 4)
+    D, I = index.search(embedding, 6)
 
-    filtered_results = [(d, i) for d, i in zip(D[0], I[0]) if d > 0.0001][:3]
+    filtered_results = [(d, i) for d, i in zip(D[0], I[0]) if d > 0.0001][:5]
 
     distances, indices = zip(
         *filtered_results) if filtered_results else ([], [])
@@ -191,7 +191,7 @@ def main():
                     f"<span style='font-weight: bold; display: inline-block; width: 50px; text-align: right; margin-left: 5px;'>{prob_pct}%</span></div>",
                     unsafe_allow_html=True)
     st.subheader('Рекомендации альбомов похожих по обложке',
-                     divider='rainbow')
+                 divider='rainbow')
     if image_file is not None:
         D, I = find_similar_covers(np.expand_dims(embedding, axis=0))
         similar_images = []
@@ -201,7 +201,7 @@ def main():
             download_url = requests.get(get_download_link(image_path, TOKEN))
             similar_images.append((download_url, genre_label.upper()))
 
-        col4, col5, col6 = st.columns(3)
+        col4, col5, col6, col7, col8 = st.columns(5)
         with col4:
             st.image(similar_images[0][0].content, width=200,
                      caption=f'Рекомендация 1 - {similar_images[0][1]}')
@@ -211,6 +211,12 @@ def main():
         with col6:
             st.image(similar_images[2][0].content, width=200,
                      caption=f'Рекомендация 3 - {similar_images[2][1]}')
+        with col7:
+            st.image(similar_images[3][0]content, width=200,
+                     caption=f'Рекомендация 4 - {similar_images[3][1]}')
+        with col8:
+            st.image(similar_images[4][0]content, width=200,
+                     caption=f'Рекомендация 5 - {similar_images[4][1]}')
 
 
 if __name__ == "__main__":
