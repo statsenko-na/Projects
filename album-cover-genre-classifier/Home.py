@@ -212,10 +212,10 @@ def main():
             st.image(similar_images[2][0].content, width=200,
                      caption=f'Рекомендация 3 - {similar_images[2][1]}')
         with col7:
-            st.image(similar_images[3][0]content, width=200,
+            st.image(similar_images[3][0].content, width=200,
                      caption=f'Рекомендация 4 - {similar_images[3][1]}')
         with col8:
-            st.image(similar_images[4][0]content, width=200,
+            st.image(similar_images[4][0].content, width=200,
                      caption=f'Рекомендация 5 - {similar_images[4][1]}')
 
 
