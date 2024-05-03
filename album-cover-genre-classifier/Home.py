@@ -193,7 +193,7 @@ def main():
     st.subheader('Рекомендации альбомов похожих по обложке',
                      divider='rainbow')
     if image_file is not None:
-            D, I = find_similar_covers(np.expand_dims(embedding, axis=0))
+        D, I = find_similar_covers(np.expand_dims(embedding, axis=0))
         similar_images = []
         for i in I:
             image_path = df_emb_2.iloc[i]['public_url']
