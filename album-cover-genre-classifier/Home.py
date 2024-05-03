@@ -199,18 +199,18 @@ def main():
         for i in I:
             image_path = df_emb_2.iloc[i]['public_url']
             genre_label = df_emb_2.iloc[i]['genre']
-            download_url = get_download_link(image_path, TOKEN)
+            download_url = requests.get(get_download_link(image_path, TOKEN))
             similar_images.append((download_url, genre_label.upper()))
 
         col4, col5, col6 = st.columns(3)
         with col4:
-            st.image(similar_images[0][0], width=200,
+            st.image(similar_images[0][0].content, width=200,
                      caption=f'Рекомендация 1 - {similar_images[0][1]}')
         with col5:
-            st.image(similar_images[1][0], width=200,
+            st.image(similar_images[1][0].content, width=200,
                      caption=f'Рекомендация 2 - {similar_images[1][1]} ')
         with col6:
-            st.image(similar_images[2][0], width=200,
+            st.image(similar_images[2][0].content, width=200,
                      caption=f'Рекомендация 3 - {similar_images[2][1]}')
 
 
