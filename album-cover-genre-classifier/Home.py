@@ -88,8 +88,6 @@ def predict_genre(image):
     return top_p.squeeze(0).numpy(), top_class.squeeze(0).numpy(), emb
 
 # Функция для поиска похожих обложек
-
-
 def find_similar_covers(embedding, start_index=0, num_results=5):
     """ Поиск 5 + num_results ближайших соседей, возвращает указанный диапазон """
     D, I = index.search(embedding, start_index + num_results +
@@ -216,7 +214,7 @@ def main():
         st.session_state["image_url"] = st.text_input(
             "Или введите URL изображения", value=st.session_state["image_url"], on_change=url_uploaded)
 
-        if st.button("Clear uploaded files"):
+        if st.button("Сбросить!"):
             st.session_state["file_uploader_key"] += 1
             st.session_state["image_url"] = ""  # Сброс URL
             st.session_state['current_index'] = 0
