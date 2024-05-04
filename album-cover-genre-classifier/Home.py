@@ -88,6 +88,8 @@ def predict_genre(image):
     return top_p.squeeze(0).numpy(), top_class.squeeze(0).numpy(), emb
 
 # Функция для поиска похожих обложек
+
+
 def find_similar_covers(embedding, start_index=0, num_results=5):
     """ Поиск 5 + num_results ближайших соседей, возвращает указанный диапазон """
     D, I = index.search(embedding, start_index + num_results +
@@ -196,7 +198,7 @@ def main():
     </style>
     """, unsafe_allow_html=True)
 
-    st.subheader('Классификация музыкальных жанров по обложке альбома',
+    st.subheader('Определение музыкального жанра по обложке альбома',
                  divider='rainbow')
 
     col1, col2, col3 = st.columns([1, 1, 1])
@@ -214,7 +216,7 @@ def main():
         st.session_state["image_url"] = st.text_input(
             "Или введите URL изображения", value=st.session_state["image_url"], on_change=url_uploaded)
 
-        if st.button("Сбросить!"):
+        if st.button("Сбросить"):
             st.session_state["file_uploader_key"] += 1
             st.session_state["image_url"] = ""  # Сброс URL
             st.session_state['current_index'] = 0
@@ -253,7 +255,8 @@ def main():
                     f"<span style='display: inline-block; width: 240px;'>{bar_filled}{bar_empty}</span>"
                     f"<span style='font-weight: bold; display: inline-block; width: 50px; text-align: right; margin-left: 5px;'>{prob_pct}%</span></div>",
                     unsafe_allow_html=True)
-    st.subheader('Рекомендации альбомов похожих по обложке',
+
+    st.subheader('Вам может понравиться',
                  divider='rainbow')
 
     if image is not None:
@@ -280,19 +283,19 @@ def main():
         col4, col5, col6, col7, col8 = st.columns(5)
         with col4:
             st.image(similar_images[0][0].content, width=200,
-                     caption=f'Рекомендация 1 - {similar_images[0][1]}')
+                     caption=f'Рекомендация {st.session_state['current_index'] + 1} - {similar_images[0][1]}')
         with col5:
             st.image(similar_images[1][0].content, width=200,
-                     caption=f'Рекомендация 2 - {similar_images[1][1]} ')
+                     caption=f'Рекомендация {st.session_state['current_index'] + 2} - {similar_images[1][1]} ')
         with col6:
             st.image(similar_images[2][0].content, width=200,
-                     caption=f'Рекомендация 3 - {similar_images[2][1]}')
+                     caption=f'Рекомендация {st.session_state['current_index'] + 3} - {similar_images[2][1]}')
         with col7:
             st.image(similar_images[3][0].content, width=200,
-                     caption=f'Рекомендация 4 - {similar_images[3][1]}')
+                     caption=f'Рекомендация {st.session_state['current_index'] + 4} - {similar_images[3][1]}')
         with col8:
             st.image(similar_images[4][0].content, width=200,
-                     caption=f'Рекомендация 5 - {similar_images[4][1]}')
+                     caption=f'Рекомендация {st.session_state['current_index'] + 5} - {similar_images[4][1]}')
 
 
 if __name__ == "__main__":
