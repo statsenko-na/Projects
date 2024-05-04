@@ -160,6 +160,16 @@ def is_image_url(url):
         return False
 
 
+def file_uploaded():
+    st.session_state["image_url"] = ""
+    st.session_state['current_index'] = 0
+
+
+def url_uploaded():
+    image_file = None
+    st.session_state['current_index'] = 0
+
+
 def main():
     # CSS для уменьшения отступов и изменения размера шрифта
     st.markdown("""
@@ -190,21 +200,21 @@ def main():
 
     st.subheader('Классификация музыкальных жанров по обложке альбома',
                  divider='rainbow')
-    if 'current_index' not in st.session_state:
-        st.session_state['current_index'] = 0
 
     col1, col2, col3 = st.columns([1, 1, 1])
     with col1:
+        if 'current_index' not in st.session_state:
+            st.session_state['current_index'] = 0
         if "file_uploader_key" not in st.session_state:
             st.session_state["file_uploader_key"] = 0
         if "image_url" not in st.session_state:
             st.session_state["image_url"] = ""
 
         image_file = st.file_uploader(
-            "Загрузите обложку альбома", type=["png", "jpg", "jpeg"], key=st.session_state["file_uploader_key"])
+            "Загрузите обложку альбома", type=["png", "jpg", "jpeg"], key=st.session_state["file_uploader_key"], on_change=file_uploaded)
 
         st.session_state["image_url"] = st.text_input(
-            "Или введите URL изображения", value=st.session_state["image_url"])
+            "Или введите URL изображения", value=st.session_state["image_url"], on_change=url_uploaded)
 
         if st.button("Clear uploaded files"):
             st.session_state["file_uploader_key"] += 1
@@ -212,12 +222,11 @@ def main():
             st.session_state['current_index'] = 0
             st.rerun()
 
-    image = None
-    if image_file is not None:
-        image = PIL.Image.open(image_file)
-    elif st.session_state["image_url"]:
-        image = load_image_url(st.session_state["image_url"])
-        # image_file = st.session_state["image_url"]
+        image = None
+        if st.session_state["image_url"]:
+            image = load_image_url(st.session_state["image_url"])
+        elif image_file is not None:
+            image = PIL.Image.open(image_file)
 
     if image is not None:
         with col2:
@@ -250,9 +259,15 @@ def main():
                  divider='rainbow')
 
     if image is not None:
-        if st.button('Ещё'):
-            # Перемещаем индекс на следующие 5 элементов
-            st.session_state['current_index'] += 5
+        prev_col, *_, next_col = st.columns(10)
+        with next_col:
+            if st.button('Следующие'):
+                # Перемещаем индекс на следующие 5 элементов
+                st.session_state['current_index'] += 5
+
+        with prev_col:
+            if st.button('Предыдущие') and st.session_state['current_index'] >= 5:
+                st.session_state['current_index'] -= 5
 
         D, I = find_similar_covers(np.expand_dims(
             embedding, axis=0), start_index=st.session_state['current_index'], num_results=5)
