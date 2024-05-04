@@ -88,11 +88,13 @@ def predict_genre(image):
 # Функция для поиска похожих обложек
 
 
-def find_similar_covers(embedding):
-    # Поиск 4 ближайших соседей
-    D, I = index.search(embedding, 6)
+def find_similar_covers(embedding, start_index=0, num_results=5):
+    """ Поиск 5 + num_results ближайших соседей, возвращает указанный диапазон """
+    D, I = index.search(embedding, start_index + num_results +
+                        5)  # Запрашиваем больше результатов на случай дубликатов
 
-    filtered_results = [(d, i) for d, i in zip(D[0], I[0]) if d > 0.0001][:5]
+    filtered_results = [(d, i) for d, i in zip(D[0], I[0])
+                        if d > 0.0001][start_index:start_index + num_results]
 
     distances, indices = zip(
         *filtered_results) if filtered_results else ([], [])
@@ -186,6 +188,8 @@ def main():
 
     st.subheader('Классификация музыкальных жанров по обложке альбома',
                  divider='rainbow')
+    if 'current_index' not in st.session_state:
+        st.session_state['current_index'] = 0
 
     col1, col2, col3 = st.columns([1, 1, 1])
     with col1:
@@ -241,8 +245,14 @@ def main():
                     unsafe_allow_html=True)
     st.subheader('Рекомендации альбомов похожих по обложке',
                  divider='rainbow')
+
     if image is not None:
-        D, I = find_similar_covers(np.expand_dims(embedding, axis=0))
+        if st.button('Ещё'):
+            # Перемещаем индекс на следующие 5 элементов
+            st.session_state['current_index'] += 5
+
+        D, I = find_similar_covers(np.expand_dims(
+            embedding, axis=0), start_index=st.session_state['current_index'], num_results=5)
 
         similar_images = []
         for i in I:
