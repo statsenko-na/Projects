@@ -207,6 +207,7 @@ def main():
         if st.button("Clear uploaded files"):
             st.session_state["file_uploader_key"] += 1
             st.session_state["image_url"] = ""  # Сброс URL
+            st.session_state['current_index'] = 0
             st.rerun()
 
     image = None
