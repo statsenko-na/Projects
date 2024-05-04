@@ -283,19 +283,19 @@ def main():
         col4, col5, col6, col7, col8 = st.columns(5)
         with col4:
             st.image(similar_images[0][0].content, width=200,
-                     caption=f'Рекомендация {st.session_state['current_index'] + 1} - {similar_images[0][1]}')
+                     caption=f'Рекомендация {st.session_state["current_index"] + 1} - {similar_images[0][1]}')
         with col5:
             st.image(similar_images[1][0].content, width=200,
-                     caption=f'Рекомендация {st.session_state['current_index'] + 2} - {similar_images[1][1]} ')
+                     caption=f'Рекомендация {st.session_state["current_index"] + 2} - {similar_images[1][1]} ')
         with col6:
             st.image(similar_images[2][0].content, width=200,
-                     caption=f'Рекомендация {st.session_state['current_index'] + 3} - {similar_images[2][1]}')
+                     caption=f'Рекомендация {st.session_state["current_index"] + 3} - {similar_images[2][1]}')
         with col7:
             st.image(similar_images[3][0].content, width=200,
-                     caption=f'Рекомендация {st.session_state['current_index'] + 4} - {similar_images[3][1]}')
+                     caption=f'Рекомендация {st.session_state["current_index"] + 4} - {similar_images[3][1]}')
         with col8:
             st.image(similar_images[4][0].content, width=200,
-                     caption=f'Рекомендация {st.session_state['current_index'] + 5} - {similar_images[4][1]}')
+                     caption=f'Рекомендация {st.session_state["current_index"] + 5} - {similar_images[4][1]}')
 
 
 if __name__ == "__main__":
