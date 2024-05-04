@@ -13,6 +13,8 @@ import settings
 import math
 from torchvision import models, transforms
 from torchvision.transforms import v2
+from io import BytesIO
+import base64
 
 # Add the path to the parent folder of the current script's directory to the system path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -119,6 +121,41 @@ def get_download_link(public_key, oauth_token):
         return "Error: Не удалось получить ссылку на скачивание."
 
 
+def load_image_url(input_string):
+    """ Загружаем изображение по URL или из Base64 строки. """
+    if input_string.startswith('http') and is_image_url(input_string):
+        try:
+            response = requests.get(input_string)
+            image = PIL.Image.open(BytesIO(response.content)).convert('RGB')
+            return image
+        except Exception as e:
+            st.error(f"Ошибка при загрузке изображения по URL: {e}")
+    elif input_string.startswith('data:image'):
+        try:
+            # Отрезаем префикс Base64 и декодируем данные
+            base64_data = input_string.split(';base64,')[-1]
+            image_data = base64.b64decode(base64_data)
+            image = PIL.Image.open(BytesIO(image_data)).convert('RGB')
+            return image
+        except Exception as e:
+            st.error(f"Ошибка при загрузке изображения из Base64: {e}")
+    else:
+        st.error(
+            "Предоставленная строка не является допустимым URL или Base64 изображением.")
+    return None
+
+
+def is_image_url(url):
+    """ Проверяем, что URL ведет к изображению по MIME-типу. """
+    try:
+        response = requests.head(url, allow_redirects=True)
+        content_type = response.headers.get('Content-Type', '')
+        return 'image' in content_type
+    except requests.RequestException as e:
+        st.error(f"Ошибка при проверке URL: {e}")
+        return False
+
+
 def main():
     # CSS для уменьшения отступов и изменения размера шрифта
     st.markdown("""
@@ -154,13 +191,26 @@ def main():
     with col1:
         if "file_uploader_key" not in st.session_state:
             st.session_state["file_uploader_key"] = 0
+        if "image_url" not in st.session_state:
+            st.session_state["image_url"] = ""
 
         image_file = st.file_uploader(
-            "Загрузите обложку альбома для определения жанра и рекомендаций", type=["png", "jpg", "jpeg"], key=st.session_state["file_uploader_key"])
+            "Загрузите обложку альбома", type=["png", "jpg", "jpeg"], key=st.session_state["file_uploader_key"])
+
+        st.session_state["image_url"] = st.text_input(
+            "Или введите URL изображения", value=st.session_state["image_url"])
 
         if st.button("Clear uploaded files"):
             st.session_state["file_uploader_key"] += 1
+            st.session_state["image_url"] = ""  # Сброс URL
             st.rerun()
+
+    image = None
+    if image_file is not None:
+        image = PIL.Image.open(image_file)
+    elif st.session_state["image_url"]:
+        image = load_image_url(st.session_state["image_url"])
+        # image_file = st.session_state["image_url"]
     with col2:
         if image_file is not None:
             image = load_image(image_file)
