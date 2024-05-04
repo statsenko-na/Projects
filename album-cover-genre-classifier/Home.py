@@ -211,14 +211,13 @@ def main():
     elif st.session_state["image_url"]:
         image = load_image_url(st.session_state["image_url"])
         # image_file = st.session_state["image_url"]
-    with col2:
-        if image_file is not None:
-            image = load_image(image_file)
-            st.image(image, width=300,
-                     caption='Загруженная обложка')
+
+    if image is not None:
+        with col2:
+            st.image(image, width=250, caption='Загруженная обложка')
 
     with col3:
-        if image_file is not None:
+        if image is not None:
             probs, top_classes, embedding = predict_genre(image)
             st.write("Вероятности жанров:")
             for prob, cls in zip(probs, top_classes):
@@ -242,8 +241,9 @@ def main():
                     unsafe_allow_html=True)
     st.subheader('Рекомендации альбомов похожих по обложке',
                  divider='rainbow')
-    if image_file is not None:
+    if image is not None:
         D, I = find_similar_covers(np.expand_dims(embedding, axis=0))
+
         similar_images = []
         for i in I:
             image_path = df_emb_2.iloc[i]['public_url']
