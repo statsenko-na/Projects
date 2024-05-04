@@ -76,6 +76,8 @@ def predict_genre(image):
         v2.Normalize(mean=[0.485, 0.456, 0.406], std=[
             0.229, 0.224, 0.225])
     ])
+    if image.mode != 'RGB':
+        image = image.convert('RGB')
     image_1 = transform(image).unsqueeze(0)
     model.eval()
     with torch.no_grad():
