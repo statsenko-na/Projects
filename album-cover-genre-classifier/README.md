@@ -1,8 +1,7 @@
 # Определение жанра по изображению обложки музыкального диска
 
 **Демонстрация приложения**: [Album Cover Classification App](https://album-cover-recsys.streamlit.app/)  
-**Блокнот с обучением модели и анализом данных в Colab:** [[album-cover-genre-classifier.ipynb](https://github.com/statsenko-na/Projects/blob/main/album-cover-genre-classifier/album-cover-genre-classifier.ipynb)
-](https://colab.research.google.com/drive/1vW54VPHQL1wPytUdJW63y8QeCaY3yklt#forceEdit=true&sandboxMode=true)
+**Блокнот с обучением модели и анализом данных в Colab:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1vW54VPHQL1wPytUdJW63y8QeCaY3yklt#forceEdit=true&sandboxMode=true)
 
 ## О проекте
 Этот проект посвящен задаче классификации музыкальных жанров по обложкам альбомов с использованием глубокого обучения. Реализация включает в себя веб-приложение на Streamlit, которое позволяет пользователям загружать обложки и получать классификацию жанра с указанием вероятностей, а также рекомендации похожих альбомов на основе визуальных признаков.
