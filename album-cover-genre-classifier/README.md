@@ -1,6 +1,8 @@
-# Определение жанра по изображению обложки музыкального диска
+# Определение жанра по обложке музыкального диска
 
-* **Демонстрация приложения**: [Album Cover Classification App](https://album-cover-recsys.streamlit.app/)  
+* **Демонстрация приложения**: [Album Cover Classification App](https://album-cover-recsys.streamlit.app/)
+ <img src="images/showcase.gif" alt="covers" width="800">
+ 
 * **Блокнот с обучением модели и анализом данных в [Colab](https://colab.research.google.com/drive/1vW54VPHQL1wPytUdJW63y8QeCaY3yklt#forceEdit=true&sandboxMode=true):** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1vW54VPHQL1wPytUdJW63y8QeCaY3yklt#forceEdit=true&sandboxMode=true)
 
 ## О проекте
